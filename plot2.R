@@ -7,9 +7,14 @@ data <- data[2:nrow(data),]
 # Subset data for data from the dates 2007-02-01 and 2007-02-02
 subdata <- data[as.character(as.Date(data$Date, format="%d/%m/%Y")) == "2007-02-01" |
                         as.character(as.Date(data$Date, format="%d/%m/%Y")) == "2007-02-02",  ]
-## Making Plots
-hist(as.numeric(subdata$Global_active_power), col="red", 
-     main="Global Active Power", xlab="Global Active Power (kilowatts)")
+## Create DateTime column
+DateTime <- as.POSIXct(
+        strptime(paste(subdata$Date,subdata$Time),format='%d/%m/%Y %H:%M:%S'))
+# Bind 'DateTime' as new line of 'subdata2'
+subdata2 <- cbind(subdata, DateTime)
+# Plot graph by given some necessary parameters
+plot(subdata2$DateTime, subdata2$Global_active_power, type="l", xlab="", 
+     ylab="Global Active Power (kilowatts)")
 # Copy current display into "plot2.png"
 dev.copy(png, file="plot2.png")
 # Turn off device
